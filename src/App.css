@@ -1,0 +1,13 @@
+.App {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(35, 35, 35);
+}
+
+.App > * {
+  height: 100vh;
+}
+
+.MainGrid {
+  background-color: rgb(35, 35, 35);
+}
