@@ -6,6 +6,7 @@ import {
     InputRightAddon,
     Text,
 } from "@chakra-ui/react";
+
 import { AddIcon } from "@chakra-ui/icons";
 import "./WriteNote.css";
 
@@ -13,7 +14,7 @@ function WriteNote({ onAddNote }) {
     const [text, setText] = useState("");
 
     return (
-        <div class="WriteNote">
+        <div className="WriteNote">
             <Input
                 placeholder="Write a note..."
                 size="lg"

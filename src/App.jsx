@@ -1,14 +1,8 @@
 import { useState } from "react";
 import {
     Box,
-    Button,
-    Center,
     Flex,
-    Grid,
-    GridItem,
-    Input,
-    Square,
-    Text,
+    Grid
 } from "@chakra-ui/react";
 import WriteNote from "./components/WriteNote/WriteNote";
 import NoteList from "./components/NoteList/NoteList";
@@ -19,6 +13,12 @@ function App() {
     const addNote = (note) => {
         setList((pre) => [...pre, note]);
     };
+
+    const deleteNote = (id) => {
+        const newList = list.filter((item, index) => index !== id);
+        setList(newList);
+    }
+
     return (
         <div className="App">
             <Grid
@@ -38,7 +38,7 @@ function App() {
                 </Box>
 
                 <Box bg="rgb(35,35,35)">
-                    <NoteList list={list} />
+                    <NoteList list={list} handleDelete={deleteNote} />
                 </Box>
             </Grid>
         </div>

@@ -1,13 +1,19 @@
-import { Box, Box as Grid, GridItem } from "@chakra-ui/react";
+import { Box, CloseButton, Grid, GridItem, Heading, useDisclosure } from "@chakra-ui/react";
+import { format } from "date-fns";
 import "./Note.css";
 
 const CHARACTER_LIMIT = 200;
 
-function Note({ text }) {
+function Note({ id, text, handleDelete }) {
     const message = text ? text.slice(0, CHARACTER_LIMIT) : "Example note";
-
-    const datetime = new Date().toLocaleString();
-
+    const datetime = format(new Date(), "MMM qo hh:mm a"); //e.g. Apr 1st, 9:00 AM
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    
+    const confirmation = () => {
+        if (window.confirm("Are you sure you want to delete your note?")) {
+            handleDelete(id);
+        }
+    }
     return (
         <Grid
             templateAreas={`"header header"
@@ -18,12 +24,18 @@ function Note({ text }) {
             height="20rem"
             gridTemplateRows={"50px 1fr 2rem"}
             padding={2}
+            gap={4}
         >
-            <GridItem area={"header"} h="4rem"></GridItem>
-            <GridItem area={"main"} h="14rem">
+            <GridItem area={"header"}>
+                <Box >
+                    <CloseButton marginLeft="auto" marginRight="0" size="md" onClick={() => {confirmation()}}/>
+                </Box>
+                <Box><Heading as='h3' size='md'>Title</Heading></Box>
+            </GridItem>
+            <GridItem area={"main"}>
                 {message}
             </GridItem>
-            <GridItem area={"footer"} h="2rem">
+            <GridItem area={"footer"} textAlign="right">
                 {datetime}
             </GridItem>
         </Grid>
