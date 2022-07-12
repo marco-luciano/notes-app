@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-    Box,
-    Flex,
-    Grid
-} from "@chakra-ui/react";
+import { Box, Flex, Grid } from "@chakra-ui/react";
 import WriteNote from "./components/WriteNote/WriteNote";
 import NoteList from "./components/NoteList/NoteList";
 import "./App.css";
@@ -17,7 +13,7 @@ function App() {
     const deleteNote = (id) => {
         const newList = list.filter((item, index) => index !== id);
         setList(newList);
-    }
+    };
 
     return (
         <div className="App">

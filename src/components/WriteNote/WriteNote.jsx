@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import {
     Button,
+    Flex,
     Input,
     InputGroup,
     InputRightAddon,
@@ -11,18 +12,39 @@ import { AddIcon } from "@chakra-ui/icons";
 import "./WriteNote.css";
 
 function WriteNote({ onAddNote }) {
-    const [text, setText] = useState("");
+    const [text, setText] = useState({ title: "", note: "" });
+    const handleTitle = (title) => {
+        let newText = { ...text };
+        newText.title = title;
+        setText(newText);
+    };
+
+    const handleNote = (newTextNote) => {
+        let newText = { ...text };
+        newText.note = newTextNote;
+        setText(newText);
+    };
 
     return (
-        <div className="WriteNote">
+        <Flex className="WriteNote">
+            <Input
+                placeholder="Title"
+                size="lg"
+                bg="white"
+                textColor="black"
+                focusBorderColor="black"
+                value={text.title}
+                width="40%"
+                onChange={(e) => handleTitle(e.target.value)}
+            />
             <Input
                 placeholder="Write a note..."
                 size="lg"
                 bg="white"
                 textColor="black"
                 focusBorderColor="black"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                value={text.note}
+                onChange={(e) => handleNote(e.target.value)}
             />
             <Button
                 color="yellow"
@@ -33,7 +55,7 @@ function WriteNote({ onAddNote }) {
                 {" "}
                 <AddIcon w={6} h={6} />{" "}
             </Button>
-        </div>
+        </Flex>
     );
 }
 export default WriteNote;

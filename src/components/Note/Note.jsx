@@ -1,19 +1,31 @@
-import { Box, CloseButton, Grid, GridItem, Heading, useDisclosure } from "@chakra-ui/react";
+import {
+    Box,
+    CloseButton,
+    Grid,
+    GridItem,
+    Heading,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { format } from "date-fns";
 import "./Note.css";
 
 const CHARACTER_LIMIT = 200;
+const TITLE_LIMIT = 50;
 
-function Note({ id, text, handleDelete }) {
-    const message = text ? text.slice(0, CHARACTER_LIMIT) : "Example note";
+function Note({ id, title, text, handleDelete }) {
+    let noteTitle = title.slice(0, TITLE_LIMIT);
+    noteTitle = !title.length ? "Note title" : noteTitle;
+    const message = text.note
+        ? text.note.slice(0, CHARACTER_LIMIT)
+        : "Example note";
     const datetime = format(new Date(), "MMM qo hh:mm a"); //e.g. Apr 1st, 9:00 AM
     const { isOpen, onOpen, onClose } = useDisclosure();
-    
+
     const confirmation = () => {
         if (window.confirm("Are you sure you want to delete your note?")) {
             handleDelete(id);
         }
-    }
+    };
     return (
         <Grid
             templateAreas={`"header header"
@@ -27,14 +39,23 @@ function Note({ id, text, handleDelete }) {
             gap={4}
         >
             <GridItem area={"header"}>
-                <Box >
-                    <CloseButton marginLeft="auto" marginRight="0" size="md" onClick={() => {confirmation()}}/>
+                <Box>
+                    <CloseButton
+                        marginLeft="auto"
+                        marginRight="0"
+                        size="md"
+                        onClick={() => {
+                            confirmation();
+                        }}
+                    />
                 </Box>
-                <Box><Heading as='h3' size='md'>Title</Heading></Box>
+                <Box>
+                    <Heading as="h3" size="md">
+                        {noteTitle}
+                    </Heading>
+                </Box>
             </GridItem>
-            <GridItem area={"main"}>
-                {message}
-            </GridItem>
+            <GridItem area={"main"}>{message}</GridItem>
             <GridItem area={"footer"} textAlign="right">
                 {datetime}
             </GridItem>
