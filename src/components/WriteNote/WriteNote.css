@@ -14,3 +14,11 @@
     border-radius: 0px !important;
     margin: 0 auto;
 }
+
+.btnAddNote:hover {
+    background-color: white;
+}
+
+.btnAddNote:hover > * {
+    color: black;
+}

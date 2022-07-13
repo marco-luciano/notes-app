@@ -1,6 +1,7 @@
-import { Grid, Stack } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import Note from "../Note/Note";
 import "./NoteList.css";
+
 const NoteList = ({ list, handleDelete }) => {
     return (
         <Grid className="NoteList" gridTemplateColumns="repeat(6, 1fr)" gap={2}>

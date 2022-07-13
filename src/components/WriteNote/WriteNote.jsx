@@ -1,12 +1,5 @@
-import React, { useState, useCallback } from "react";
-import {
-    Button,
-    Flex,
-    Input,
-    InputGroup,
-    InputRightAddon,
-    Text,
-} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Button, Flex, Input } from "@chakra-ui/react";
 
 import { AddIcon } from "@chakra-ui/icons";
 import "./WriteNote.css";
@@ -47,13 +40,13 @@ function WriteNote({ onAddNote }) {
                 onChange={(e) => handleNote(e.target.value)}
             />
             <Button
+                className="btnAddNote"
                 color="yellow"
                 bg="black"
                 size="lg"
                 onClick={() => onAddNote(text)}
             >
-                {" "}
-                <AddIcon w={6} h={6} />{" "}
+                <AddIcon className="btnAddNoteIcon" w={8} h={8} />
             </Button>
         </Flex>
     );
