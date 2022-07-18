@@ -45,7 +45,6 @@ function App() {
     const [noteData, setNoteData] = useState({noteTitle: "", noteText: "", datetime: new Date()});
 
     const noteHandleClick = (props) => {
-        console.log(props.noteTitle, props.message, props.datetime);
         setNoteData(props);
         openModal();
     }
