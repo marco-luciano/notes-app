@@ -1,6 +1,6 @@
 .WriteNote {
     margin: 1rem;
-    width: 25vw;
+    width: calc(20vw + 150px);
     overflow-y: hidden;
 }
 

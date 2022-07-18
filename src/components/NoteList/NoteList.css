@@ -2,3 +2,35 @@
     background-color: rgb(35, 35, 35);
     margin-left: 12px;
 }
+
+@media (min-width: 1251px) and (max-width: 1650px) {
+    .NoteList {
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 10px !important;
+        margin-left: 12px;
+    }
+}
+
+@media (min-width: 701px) and (max-width: 1250px) {
+    .NoteList {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 10px !important;
+        margin-left: 12px;
+    }
+}
+
+@media (min-width: 451px) and (max-width: 700px) {
+    .NoteList {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px !important;
+        margin-left: 12px;
+    }
+}
+
+@media (min-width: 1px) and (max-width: 450px) {
+    .NoteList {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        margin-left: 12px;
+    }
+}

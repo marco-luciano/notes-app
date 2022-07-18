@@ -19,10 +19,19 @@ const MESSAGE_NOTE_DELETE_CONFIRMATION =
 
 Modal.setAppElement("#root");
 
-function Note({ id, title, text, handleDelete, handleClick, backgroundColor = "#83eaf1" }) {
-    const [modalIsOpen, setIsOpen] = useState(false);
+function Note({
+    id,
+    title,
+    datetime,
+    text,
+    handleDelete,
+    handleClick,
+    backgroundColor = "#83eaf1",
+}) {
+    // we don't want to add note if the note has only line breaks
+    const validateLineBreaks = text.note.replace(/(?:\r\n|\r|\n)/g, "");
 
-    if (!text.note) {
+    if (!text.note || validateLineBreaks.length === 0) {
         return null;
     }
 
@@ -31,13 +40,10 @@ function Note({ id, title, text, handleDelete, handleClick, backgroundColor = "#
     const message = text.note
         ? text.note.slice(0, CHARACTER_LIMIT)
         : "Example note";
-    const datetime = format(new Date(), "MMM do hh:mm a"); //e.g. Apr 1st, 9:00 AM
+    const datetimeUpdate = format(new Date(), "MMM do hh:mm a"); //e.g. Apr 1st, 9:00 AM
+    const confirmation = () =>
+        window.confirm(MESSAGE_NOTE_DELETE_CONFIRMATION) && handleDelete(id);
 
-    const confirmation = () => {
-        if (window.confirm(MESSAGE_NOTE_DELETE_CONFIRMATION)) {
-            handleDelete(id);
-        }
-    };
     return (
         <>
             <Grid
@@ -45,10 +51,11 @@ function Note({ id, title, text, handleDelete, handleClick, backgroundColor = "#
                     "main"
                     "footer"`}
                 backgroundColor={backgroundColor}
-                width="15vw"
+                width="calc(9vw + 100px)"
                 height="20rem"
-                gridTemplateRows={"50px 1fr 2rem"}
+                gridTemplateRows={"50px 1fr 1.5rem"}
                 padding={4}
+                marginBottom={6}
                 gap={4}
             >
                 <GridItem area={"header"}>
@@ -74,9 +81,11 @@ function Note({ id, title, text, handleDelete, handleClick, backgroundColor = "#
                     overflowX="auto"
                     onClick={() =>
                         handleClick({
-                            noteTitle: noteTitle,
-                            message: message,
+                            id: id,
+                            title: noteTitle,
+                            note: message,
                             datetime: datetime,
+                            datetimeUpdate: datetimeUpdate,
                         })
                     }
                 >

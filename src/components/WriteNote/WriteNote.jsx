@@ -1,39 +1,45 @@
 import React, { useState } from "react";
-import { Box, Button, Flex, Input, Textarea } from "@chakra-ui/react";
-
+import { Box, Button, Flex } from "@chakra-ui/react";
+import format from "date-fns/format";
 import { AddIcon } from "@chakra-ui/icons";
 import "./WriteNote.css";
 import TextAreaAuto from "../TextAreaAuto/TextAreaAuto";
 
 function WriteNote({ onAddNote }) {
-    const [text, setText] = useState({ title: "", note: "" });
+    const [text, setText] = useState({ id: "", title: "", note: "" });
 
     const handleTitle = (title) => {
-        let newText = { ...text };
-        newText.title = title;
-        setText(newText);
-        title = "";
+        setText((pre) => ({
+            ...pre,
+            title,
+            datetime: format(new Date(), "MMM do hh:mm a"),
+            datetimeUpdate: format(new Date(), "MMM do hh:mm a"),
+        }));
     };
 
-    const handleNote = (newTextNote) => {
-        let newText = { ...text };
-        newText.note = newTextNote;
-        setText(newText);
+    const handleNote = (note) => {
+        setText((pre) => ({ ...pre, note }));
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e, maxHeight = Infinity) => {
         e.target.style.height = "inherit";
 
         const computed = window.getComputedStyle(e.target);
 
-        const height =
-            parseInt(computed.getPropertyValue("border-top-width"), 10) +
-            parseInt(computed.getPropertyValue("padding-top"), 10) +
-            e.target.scrollHeight +
-            parseInt(computed.getPropertyValue("padding-bottom"), 10) +
-            parseInt(computed.getPropertyValue("border-bottom-width"), 10);
+        const CHOP_SIZE = 14;
 
-        e.target.style.height = `${height}px`;
+        const height =
+            parseInt(computed.getPropertyValue("border-top-width"), CHOP_SIZE) +
+            parseInt(computed.getPropertyValue("padding-top"), CHOP_SIZE) +
+            e.target.scrollHeight +
+            parseInt(computed.getPropertyValue("padding-bottom"), CHOP_SIZE) +
+            parseInt(
+                computed.getPropertyValue("border-bottom-width"),
+                CHOP_SIZE
+            );
+
+        const minHeight = Math.min(height, maxHeight);
+        e.target.style.height = `${minHeight}px`;
     };
 
     const style = {
@@ -50,7 +56,7 @@ function WriteNote({ onAddNote }) {
                     value={text.title}
                     style={style}
                     size="lg"
-                    onKeyDown={handleKeyDown}
+                    onKeyDown={(e) => handleKeyDown(e, 110)}
                     onChange={(e) => handleTitle(e.target.value)}
                     onBlur={(e) => handleTitle(e.target.value)}
                 />
@@ -60,11 +66,22 @@ function WriteNote({ onAddNote }) {
                 style={style}
                 size="lg"
                 value={text.note}
-                onKeyDown={handleKeyDown}
+                onKeyDown={(e) => handleKeyDown(e, 180)}
                 onChange={(e) => handleNote(e.target.value)}
                 onBlur={() => {
-                    onAddNote(text);
-                    setText({ title: "", note: "" });
+                    if (text.note !== "") {
+                        onAddNote(text);
+                        setText({
+                            id: null,
+                            title: "",
+                            note: "",
+                            datetime: format(new Date(), "MMM do hh:mm a"),
+                            datetimeUpdate: format(
+                                new Date(),
+                                "MMM do hh:mm a"
+                            ),
+                        });
+                    }
                 }}
             />
             <Button
@@ -73,8 +90,18 @@ function WriteNote({ onAddNote }) {
                 bg="black"
                 size="lg"
                 onClick={() => {
-                    onAddNote(text);
-                    setText({ title: "", note: "" });
+                    if (text.note !== "") {
+                        onAddNote(text);
+                        setText({
+                            id: null,
+                            title: "",
+                            note: "",
+                            datetimeUpdate: format(
+                                new Date(),
+                                "MMM do hh:mm a"
+                            ),
+                        });
+                    }
                 }}
             >
                 <AddIcon className="btnAddNoteIcon" w={8} h={8} />
