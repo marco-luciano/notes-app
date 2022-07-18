@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Flex, Input } from "@chakra-ui/react";
+import { Button, Flex, Input, Textarea } from "@chakra-ui/react";
 
 import { AddIcon } from "@chakra-ui/icons";
 import "./WriteNote.css";
@@ -10,6 +10,7 @@ function WriteNote({ onAddNote }) {
         let newText = { ...text };
         newText.title = title;
         setText(newText);
+        title = "";
     };
 
     const handleNote = (newTextNote) => {
@@ -19,32 +20,37 @@ function WriteNote({ onAddNote }) {
     };
 
     return (
-        <Flex className="WriteNote">
-            <Input
+        <Flex className="WriteNote" flexDirection="column" gap={8}>
+            <Textarea
                 placeholder="Title"
                 size="lg"
                 bg="white"
                 textColor="black"
                 focusBorderColor="black"
                 value={text.title}
-                width="40%"
                 onChange={(e) => handleTitle(e.target.value)}
             />
-            <Input
+            <Textarea
                 placeholder="Write a note..."
                 size="lg"
                 bg="white"
                 textColor="black"
                 focusBorderColor="black"
+                height="10rem"
                 value={text.note}
-                onChange={(e) => handleNote(e.target.value)}
+                onChange={(e) => {
+                    handleNote(e.target.value);
+                }}
             />
             <Button
                 className="btnAddNote"
-                color="yellow"
+                color="#63a4ff"
                 bg="black"
                 size="lg"
-                onClick={() => onAddNote(text)}
+                onClick={() => {
+                    onAddNote(text);
+                    setText({ title: "", note: "" });
+                }}
             >
                 <AddIcon className="btnAddNoteIcon" w={8} h={8} />
             </Button>

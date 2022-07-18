@@ -12,21 +12,6 @@ import {
 import { format } from "date-fns";
 import "./Note.css";
 
-const customStyles = {
-    content: {
-        width: "30rem",
-        height: "20rem",
-        top: "50%",
-        left: "50%",
-        right: "auto",
-        bottom: "auto",
-        marginRight: "-50%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "#ffdd00",
-        justifyContent: "space-between",
-    },
-};
-
 const CHARACTER_LIMIT = 200;
 const TITLE_LIMIT = 50;
 const MESSAGE_NOTE_DELETE_CONFIRMATION =
@@ -34,19 +19,15 @@ const MESSAGE_NOTE_DELETE_CONFIRMATION =
 
 Modal.setAppElement("#root");
 
-function Note({ id, title, text, handleDelete, handleClick }) {
+function Note({ id, title, text, handleDelete, handleClick, backgroundColor = "#83eaf1" }) {
     const [modalIsOpen, setIsOpen] = useState(false);
 
-    const openModal = () => {
-        setIsOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsOpen(false);
-    };
+    if (!text.note) {
+        return null;
+    }
 
     let noteTitle = title.slice(0, TITLE_LIMIT);
-    noteTitle = !title.length ? "Note title" : noteTitle;
+    noteTitle = !title.length ? "" : noteTitle;
     const message = text.note
         ? text.note.slice(0, CHARACTER_LIMIT)
         : "Example note";
@@ -60,14 +41,14 @@ function Note({ id, title, text, handleDelete, handleClick }) {
     return (
         <>
             <Grid
-                templateAreas={`"header header"
-                    "nav main"
-                    "nav footer"`}
-                backgroundColor="#ffdd00"
+                templateAreas={`"header"
+                    "main"
+                    "footer"`}
+                backgroundColor={backgroundColor}
                 width="15vw"
                 height="20rem"
                 gridTemplateRows={"50px 1fr 2rem"}
-                padding={2}
+                padding={4}
                 gap={4}
             >
                 <GridItem area={"header"}>
@@ -91,47 +72,20 @@ function Note({ id, title, text, handleDelete, handleClick }) {
                     area={"main"}
                     textAlign="left"
                     overflowX="auto"
-                    onClick={openModal}
+                    onClick={() =>
+                        handleClick({
+                            noteTitle: noteTitle,
+                            message: message,
+                            datetime: datetime,
+                        })
+                    }
                 >
-                    {message}
+                    <Text fontSize="20px">{message}</Text>
                 </GridItem>
                 <GridItem area={"footer"} textAlign="right">
                     {datetime}
                 </GridItem>
             </Grid>
-
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                style={customStyles}
-                contentLabel={noteTitle}
-            >
-                <Flex
-                    flexDirection="column"
-                    justifyContent="space-between"
-                    height="100%"
-                >
-                    <Flex flexDirection="column" gap={4}>
-                        <Flex
-                            flexDirection="row"
-                            justifyContent="space-between"
-                        >
-                            <Heading as="h3" size="lg">
-                                {noteTitle}
-                            </Heading>
-                            <CloseButton
-                                marginLeft="auto"
-                                marginRight="0"
-                                size="lg"
-                                color="black"
-                                onClick={closeModal}
-                            />
-                        </Flex>
-                        <Text textAlign="justify">{message}</Text>
-                    </Flex>
-                    <Text>Created on {datetime}</Text>
-                </Flex>
-            </Modal>
         </>
     );
 }
