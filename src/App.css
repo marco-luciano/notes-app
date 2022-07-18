@@ -16,3 +16,9 @@
 .MainGrid {
     background-color: rgb(35, 35, 35);
 }
+
+.TextAreaAuto {
+    border-radius: 0px;
+    resize: none !important;
+    overflow-y: hidden !important;
+}

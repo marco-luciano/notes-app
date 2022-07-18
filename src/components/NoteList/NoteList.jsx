@@ -4,14 +4,20 @@ import "./NoteList.css";
 
 const NoteList = ({ list, handleDelete, noteHandleClick }) => {
     return (
-        <Grid className="NoteList" gridTemplateColumns="repeat(6, 1fr)" gap={2}>
+        <Grid
+            className="NoteList"
+            gridTemplateColumns="repeat(6, 1fr)"
+            gap={2}
+            rowGap={6}
+        >
             {list.map((item, index) => (
                 <Note
-                    id={index}
+                    id={item.id}
                     title={item.title}
                     text={item}
                     handleDelete={handleDelete}
                     handleClick={noteHandleClick}
+                    datetime={item.datetime}
                 />
             ))}
         </Grid>
