@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
 import Modal from "react-modal";
+import { nanoid } from "nanoid";
+import { format } from "date-fns";
+import * as localforage from "localforage";
+import TextAreaAuto from "./components/TextAreaAuto/TextAreaAuto";
 import WriteNote from "./components/WriteNote/WriteNote";
 import NoteList from "./components/NoteList/NoteList";
-import { nanoid } from "nanoid";
 import "./App.css";
-import { format } from "date-fns";
-import TextAreaAuto from "./components/TextAreaAuto/TextAreaAuto";
 
 const customStyles = {
     content: {
@@ -25,12 +26,39 @@ const customStyles = {
 
 function App() {
     const [list, setList] = useState([]);
+
     const addNote = (note) => {
-        setList((pre) => [...pre, { ...note, id: nanoid() }]);
+        setList((pre) => {
+            let newNote = { ...note, id: nanoid() };
+
+            localforage.setItem(newNote.id, newNote).then(() => {
+                console.log("Note added");
+            });
+            return [...pre, newNote];
+        }
+        );
     };
+
+    const getNotes = () => {
+        let notes = [];
+        localforage.iterate((value, key, index) => {
+            notes.push(value);
+        }).then(() => {
+            setList((pre) => {
+                return [...notes];
+            });
+        })
+    }
+
+    useEffect(() => getNotes(), []);
 
     const deleteNote = (id) => {
         const newList = list.filter((item) => item["id"] !== id);
+
+        localforage.removeItem(id).then(() => {
+            console.log("Note removed");
+        });
+
         setList(newList);
     };
 
@@ -68,10 +96,16 @@ function App() {
             datetimeUpdate: format(new Date(), "MMM do hh:mm a"),
         }));
 
-    const handleOnBlur = (e) =>
-        setList((pre) =>
-            pre.map((note) => (note.id === noteData.id ? noteData : note))
-        );
+    const handleOnBlur = (e) => {
+
+        localforage.setItem(noteData.id, noteData).then(() => {
+            console.log("Note updated");
+            setList((pre) =>
+                pre.map((note) => (note.id === noteData.id ? noteData : note))
+            );
+        });
+
+    }
 
     const noteHandleClick = (props) => {
         setNoteData(props);

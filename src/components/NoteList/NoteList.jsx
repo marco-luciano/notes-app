@@ -1,8 +1,27 @@
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 import { Grid } from "@chakra-ui/react";
 import Note from "../Note/Note";
+import * as localforage from "localforage";
 import "./NoteList.css";
 
 const NoteList = ({ list, handleDelete, noteHandleClick }) => {
+
+    const [notesList, setNoteList] = useState([]);
+
+    const getNotes = () => {
+        let notes = [];
+        localforage.iterate((value, key, index) => {
+            notes.push(value);
+        }).then(() => {
+            setNoteList(notes);
+        });
+    };
+
+    useEffect(() => {
+        getNotes();
+    }, []);
+
     return (
         <Grid
             className="NoteList"
@@ -18,6 +37,7 @@ const NoteList = ({ list, handleDelete, noteHandleClick }) => {
                     handleDelete={handleDelete}
                     handleClick={noteHandleClick}
                     datetime={item.datetime}
+                    key={item.id}
                 />
             ))}
         </Grid>

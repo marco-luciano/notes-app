@@ -3,7 +3,6 @@ import Modal from "react-modal";
 import {
     Box,
     CloseButton,
-    Flex,
     Grid,
     GridItem,
     Heading,
