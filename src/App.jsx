@@ -4,10 +4,10 @@ import Modal from "react-modal";
 import { nanoid } from "nanoid";
 import { format } from "date-fns";
 import * as localforage from "localforage";
-import TextAreaAuto from "./components/TextAreaAuto/TextAreaAuto";
 import WriteNote from "./components/WriteNote/WriteNote";
 import NoteList from "./components/NoteList/NoteList";
 import "./App.css";
+import TextAreaAuto from "./components/TextAreaAuto/TextAreaAuto";
 
 const customStyles = {
     content: {
